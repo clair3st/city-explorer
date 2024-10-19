@@ -14,6 +14,7 @@ function Main() {
 
 	function handleSubmit(e) {
 		e.preventDefault();
+		setErr({})
 
 		axios.get(`https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${searchInput}&format=json`)
 			.then(response =>{
@@ -28,8 +29,8 @@ function Main() {
 			.catch(function (error) {
 			    if (error.response) {
 			      // The request was made and the server responded with a status code that falls out of the range of 2xx
-
-			      setErr({code: error.response.status, message: error.response.data})
+			    	console.log(error.response)
+			      setErr({code: error.response.status, message: error.response.data.error})
 			    } else if (error.request) {
 			      // The request was made but no response was received `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
 			      console.log(error.request);
