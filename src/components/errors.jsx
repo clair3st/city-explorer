@@ -1,10 +1,13 @@
+import Alert from 'react-bootstrap/Alert';
 
 function ErrorMessage(props) {
-	if('err' in props){
+
+	if('message' in props){
 		return(
-			<div>
-				<h1>{props.err}</h1>
-			</div>
+			 <Alert key='danger' variant='danger'>
+          		Error fetching city: {props.message} (Code: {props.code}).
+       		 </Alert>
+			
 		)
 	}
 }
