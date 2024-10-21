@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ErrorMessage from './errors.jsx'
 import Weather from './Weather.jsx'
+import Movies from './Movies.jsx'
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -12,9 +13,10 @@ function Main() {
 	const [location, setLocation] = useState({})
 	const [err, setErr] = useState({})
 	const [weather, setWeather] = useState([])
+	const [movies, setMovies] = useState([])
 
 
-	 function handleSubmit(e) {
+	function handleSubmit(e) {
 		e.preventDefault();
 		setErr({})
 
@@ -25,6 +27,7 @@ function Main() {
 				if ('data' in response){
 					setLocation({lat: response.data[0].lat, lon: response.data[0].lon, display_name: response.data[0].display_name})
 					getWeather(response.data[0].lat, response.data[0].lon)
+					getMovies(searchInput)
 				}
 
 
@@ -44,19 +47,30 @@ function Main() {
 
 			  })
 
-
 	}
 
-	 function getWeather(lat, lon){
-		axios.get(`http://localhost:3001/weather?lat=${lat}&lon=${lon}`)
-						.then(response=>{
-							setWeather(response.data)
-						})	
-						.catch(e => {
-							if(e.response){
-								console.log(e.response)
-							}
-						})	
+	async function getWeather(lat, lon){
+		await axios.get(`http://localhost:3001/weather?lat=${lat}&lon=${lon}`)
+		.then(response=>{
+			setWeather(response.data)
+		})	
+		.catch(e => {
+			if(e.response){
+				console.log(e.response)
+			}
+		})	
+	}
+
+	async function getMovies(city){
+		await axios.get(`http://localhost:3001/movies?city=${city}`)
+		.then(response=>{
+			setMovies(response.data)
+		})	
+		.catch(e => {
+			if(e.response){
+				console.log(e.response)
+			}
+		})	
 	}
 
 	function Location(location){
@@ -92,6 +106,7 @@ function Main() {
 			</div>
 			<Location {...location} />
 			<Weather weather={weather} />
+			<Movies movies={movies} />
 			<ErrorMessage {...err} />
 
 		</div>
